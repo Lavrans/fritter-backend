@@ -313,3 +313,210 @@ This renders the `index.html` file that will be used to interact with the backen
 **Throws**
 
 - `403` if the user is not logged in
+
+#### `Get /api/replies/freet/:freetId` - Get all replies to freet
+
+**Returns**
+
+- An array of replies to the freet
+
+**Throws**
+
+- `400` if no freetId is given
+- `404` if the freetId is invalid
+
+#### `Get /api/replies/reply/:replyId` - Get all replies to a reply
+
+**Returns**
+
+- An array of replies to the reply
+
+**Throws**
+
+- `400` if no replyId is given
+- `404` if the replyId is invalid
+
+#### `POST /api/replies/freet/:freetId` - Create a new reply to a freet
+
+**Body**
+
+- `content` _{string}_ - The content of the reply
+
+**Returns**
+
+- A success message
+- A object with the created reply
+
+**Throws**
+
+- `403` if the user is not logged in
+- `400` If the reply content is empty or a stream of empty spaces
+- `404` If the freetId is invalid
+- `413` If the reply content is more than 140 characters long
+
+#### `POST /api/replies/reply/:replyId` - Create a new reply to a reply
+
+**Body**
+
+- `content` _{string}_ - The content of the reply
+
+**Returns**
+
+- A success message
+- A object with the created reply
+
+**Throws**
+
+- `403` if the user is not logged in
+- `400` If the reply content is empty or a stream of empty spaces
+- `404` If the replyId is invalid
+- `413` If the reply content is more than 140 characters long
+
+#### `PUT /api/replies/:replyId?` - Update an existing reply
+
+**Body**
+
+- `content` _{string}_ - The new content of the freet
+
+**Returns**
+
+- A success message
+- An object with the updated reply
+
+**Throws**
+
+- `403` if the user is not logged in
+- `404` if the replyId is invalid
+- `403` if the user is not the author of the reply
+- `400` if the new freet content is empty or a stream of empty spaces
+- `413` if the new reply content is more than 140 characters long
+
+#### `DELETE /api/replies/:replyId?` - Delete an existing reply
+
+**Returns**
+
+- A success message
+
+**Throws**
+
+- `403` if the user is not logged in
+- `403` if the user is not the author of the reply
+- `404` if the replyId is invalid
+
+#### `Get /api/followers/:username` - Get followers of a user
+
+**Returns**
+
+- An array of users 
+
+**Throws**
+
+- `400` if no userId is given
+- `404` if there is no user with username
+
+#### `POST /api/followers/:username` - Create a new follower-relationship
+
+**Returns**
+
+- A success message
+- A object with the follower relationship
+
+**Throws**
+
+- `403` if the user is not logged in
+- `400` If the userId is empty
+- `400` If user is already a follower
+- `404` If the username is invalid
+
+#### `DELETE /api/followers/:username` - Delete a follower-relationship
+
+**Returns**
+
+- A success message
+
+**Throws**
+
+- `400` if the username is empty
+- `403` if the user is not logged in
+- `400` if the user is not a follower
+- `404` if the username is invalid
+
+#### `Get /api/friends/:userId` - Get friends of a user
+
+**Returns**
+
+- An array of friends of the user
+
+**Throws**
+
+- `400` if no userId is given
+- `404` if userId is invalid
+
+#### `Get /api/feed/:feedId` - Get content of a feed
+
+**Returns**
+
+- An array of freets for the feed
+
+**Throws**
+
+- `400` if no feedId is given
+- `404` if feedId is invalid
+
+#### `Get /api/communities/:communityId` - Get a community
+
+**Returns**
+
+- A community object
+
+**Throws**
+
+- `400` if no communityId is given
+- `404` if communityId is invalid
+
+#### `Get /api/communities/` - Get all the communities
+
+**Returns**
+
+- An array of objects containing community- ids and names sorted by number of members in descending order
+
+#### `PUT /api/communities/:communityId?action=[join | leave]` - Join or leave a community (add/remove from community's members collection)
+
+**Returns**
+
+- A success message
+
+**Throws**
+
+- `403` if the user is not logged in
+- `404` if the communityId is invalid
+- `400` if the action is leave and the user is not in community members
+- `400` if the action is join and the user is already in community members
+
+#### `PUT /api/communities/:communityId/owner - Change community owner
+
+**Body**
+
+- `userId` _{string}_ - The id of the new owner
+
+**Returns**
+
+- A success message
+
+**Throws**
+
+- `401` if the requesting user is not the community owner
+- `403` if the user is not logged in
+- `404` if the communityId is invalid
+
+#### `DELETE /api/communities/:communityId?` - Delete a community
+
+**Returns**
+
+- A success message
+
+**Throws**
+
+- `403` if the user is not logged in
+- `401` if the user is not the owner of the community
+- `404` if the communityId is invalid
