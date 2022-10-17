@@ -1,0 +1,59 @@
+import type { HydratedDocument, Types } from "mongoose";
+import type { Follower } from "./model";
+import FollowerModel from "./model";
+import UserCollection from "../user/collection";
+
+class FollowerCollection {
+  static async addOneByUsername(
+    followerId: Types.ObjectId | string,
+    username: string
+  ): Promise<HydratedDocument<Follower>> {
+    const user = await UserCollection.findOneByUsername(username);
+    const follower = new FollowerModel({
+      _id: {
+        follower: followerId,
+        followee: user._id,
+      },
+    });
+    await follower.save();
+    return follower.populate({ path: "_id", populate: { path: "follower" } });
+  }
+  static async findAllByUsername(
+    username: string
+  ): Promise<Array<HydratedDocument<Follower>>> {
+    const user = await UserCollection.findOneByUsername(username);
+    return (
+      FollowerModel.find({ "_id.followee": user._id })
+        // .populate({
+        //   path: "_id",
+        //   match: { followee: user._id },
+        // })
+        .populate({ path: "_id", populate: { path: "follower" } })
+        .populate({ path: "_id", populate: { path: "followee" } })
+    );
+  }
+  static async deleteOneByUsername(
+    followerId: Types.ObjectId | string,
+    username: string
+  ): Promise<boolean> {
+    const user = await UserCollection.findOneByUsername(username);
+    const follower = await FollowerModel.deleteOne({
+      "_id.follower": followerId,
+      "_id.followee": user._id,
+    });
+    return follower !== null;
+  }
+  static async findOneByUsername(
+    followerId: Types.ObjectId,
+    username: string
+  ): Promise<Follower> {
+    const user = await UserCollection.findOneByUsername(username);
+    const follower = await FollowerModel.findOne({
+      "_id.follower": followerId,
+      "_id.followee": user._id,
+    });
+    return follower;
+  }
+}
+
+export default FollowerCollection;
