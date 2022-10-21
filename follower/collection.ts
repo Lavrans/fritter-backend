@@ -54,6 +54,21 @@ class FollowerCollection {
     });
     return follower;
   }
+  static async deleteAllByUserId(
+    userId: Types.ObjectId | string
+  ): Promise<boolean> {
+    const follower = await FollowerModel.deleteMany({
+      $or: [
+        {
+          "_id.follower": userId,
+        },
+        {
+          "_id.followee": userId,
+        },
+      ],
+    });
+    return follower !== null;
+  }
 }
 
 export default FollowerCollection;
