@@ -441,7 +441,7 @@ This renders the `index.html` file that will be used to interact with the backen
 - `400` if the user is not a follower
 - `404` if the username is invalid
 
-#### `Get /api/friends/:userId` - Get friends of a user
+#### `Get /api/friends/:username` - Get friends of a user
 
 **Returns**
 
@@ -449,8 +449,8 @@ This renders the `index.html` file that will be used to interact with the backen
 
 **Throws**
 
-- `400` if no userId is given
-- `404` if userId is invalid
+- `400` if no username is given
+- `404` if username is invalid
 
 #### `Get /api/feed/:feedId` - Get content of a feed
 

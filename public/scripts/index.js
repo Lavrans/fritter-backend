@@ -48,6 +48,7 @@ const formsAndHandlers = {
   "post-reply-to-reply": createReplyToReply,
   "update-reply": editReply,
   "delete-reply": deleteReply,
+  "get-friends": getFriends,
 };
 
 // Attach handlers to forms
