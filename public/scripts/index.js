@@ -42,6 +42,12 @@ const formsAndHandlers = {
   "follow-user": follow,
   "unfollow-user": unfollow,
   "get-followers": getFollowers,
+  "get-replies-by-freet": viewAllRepliesToFreet,
+  "get-replies-by-reply": viewAllRepliesToReply,
+  "post-reply-to-freet": createReplyToFreet,
+  "post-reply-to-reply": createReplyToReply,
+  "update-reply": editReply,
+  "delete-reply": deleteReply,
 };
 
 // Attach handlers to forms

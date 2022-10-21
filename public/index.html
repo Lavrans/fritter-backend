@@ -7,6 +7,7 @@
     <script src="/scripts/freet.js"></script>
     <script src="/scripts/follow.js"></script>
     <script src="/scripts/user.js"></script>
+    <script src="/scripts/reply.js"></script>
     <script src="/scripts/index.js"></script>
   </head>
 
@@ -143,6 +144,66 @@
               <input id="username" name="username" />
             </div>
             <input type="submit" value="Get" />
+          </form>
+          <form id="get-replies-by-freet">
+            <h3>Get Replies by Freet</h3>
+            <div>
+              <label for="freetId">Freet id:</label>
+              <input id="freetId" name="freetId" />
+            </div>
+            <input type="submit" value="Get" />
+          </form>
+          <form id="get-replies-by-reply">
+            <h3>Get Replies by Reply</h3>
+            <div>
+              <label for="replyId">Reply id:</label>
+              <input id="replyId" name="replyId" />
+            </div>
+            <input type="submit" value="Get" />
+          </form>
+          <form id="post-reply-to-freet">
+            <h3>Reply to Freet</h3>
+            <div>
+              <label for="freetId">Freet id:</label>
+              <input id="freetId" name="freetId" />
+            </div>
+            <div>
+              <label for="content">Content: </label>
+              <input id="content" name="content" />
+            </div>
+            <input type="submit" value="Reply" />
+          </form>
+          <form id="post-reply-to-reply">
+            <h3>Reply to Reply</h3>
+            <div>
+              <label for="replyId">Reply id:</label>
+              <input id="replyId" name="replyId" />
+            </div>
+            <div>
+              <label for="content">Content: </label>
+              <input id="content" name="content" />
+            </div>
+            <input type="submit" value="Reply" />
+          </form>
+          <form id="update-reply">
+            <h3>Edit Reply</h3>
+            <div>
+              <label for="replyId">Reply id:</label>
+              <input id="replyId" name="replyId" />
+            </div>
+            <div>
+              <label for="content">Content: </label>
+              <input id="content" name="content" />
+            </div>
+            <input type="submit" value="Edit" />
+          </form>
+          <form id="delete-reply">
+            <h3>Delete Reply</h3>
+            <div>
+              <label for="replyId">Reply id:</label>
+              <input id="replyId" name="replyId" />
+            </div>
+            <input type="submit" value="Delete" />
           </form>
         </div>
       </section>

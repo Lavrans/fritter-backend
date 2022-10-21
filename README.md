@@ -318,7 +318,7 @@ This renders the `index.html` file that will be used to interact with the backen
 
 **Returns**
 
-- An array of replies to the freet
+- An array of all replies to the freet, sorted by date in descending order
 
 **Throws**
 
@@ -329,7 +329,7 @@ This renders the `index.html` file that will be used to interact with the backen
 
 **Returns**
 
-- An array of replies to the reply
+- An array of replies to the reply, sorted by date in descending order
 
 **Throws**
 
