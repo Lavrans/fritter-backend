@@ -1,5 +1,5 @@
 import type { HydratedDocument, Types } from "mongoose";
-import type { Follower } from "./model";
+import type { Follower, PopulatedFollower } from "./model";
 import FollowerModel from "./model";
 import UserCollection from "../user/collection";
 
@@ -22,15 +22,16 @@ class FollowerCollection {
     username: string
   ): Promise<Array<HydratedDocument<Follower>>> {
     const user = await UserCollection.findOneByUsername(username);
-    return (
-      FollowerModel.find({ "_id.followee": user._id })
-        // .populate({
-        //   path: "_id",
-        //   match: { followee: user._id },
-        // })
-        .populate({ path: "_id", populate: { path: "follower" } })
-        .populate({ path: "_id", populate: { path: "followee" } })
-    );
+    return FollowerModel.find({ "_id.followee": user._id })
+      .populate({ path: "_id", populate: { path: "follower" } })
+      .populate({ path: "_id", populate: { path: "followee" } });
+  }
+  static async findAllById(
+    id: Types.ObjectId | string
+  ): Promise<Array<HydratedDocument<PopulatedFollower>>> {
+    return FollowerModel.find({ "_id.followee": id })
+      .populate({ path: "_id", populate: { path: "follower" } })
+      .populate({ path: "_id", populate: { path: "followee" } });
   }
   static async deleteOneByUsername(
     followerId: Types.ObjectId | string,

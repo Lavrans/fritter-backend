@@ -60,7 +60,7 @@ class FeedCollection {
    * @return {Promise<Boolean>} - false if the freet is in no documents, othherwise true
    */
   static async removeContent(freetId: Types.ObjectId): Promise<Boolean> {
-    const feed = await FeedModel.find({ content: { $elemMatch: freetId } });
+    const feed = await FeedModel.find({ content: freetId });
     feed.forEach(async (f) => {
       const index = f.content.indexOf(freetId);
       f.content.splice(index, 1);
