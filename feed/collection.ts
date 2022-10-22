@@ -54,10 +54,28 @@ class FeedCollection {
   }
 
   /**
-   * Remove a freed from a feed
+   * Remove a freet from a feed
+   *
+   * @param {string} feedId - The id of feed to remove content from
+   * @param {string} freetId - The id of freet to remove
+   * @return {Promise<Boolean>} -
+   */
+  static async removeContentFromFeed(
+    feedId: Types.ObjectId | string,
+    freetId: Types.ObjectId
+  ): Promise<Boolean> {
+    const feed = await FeedModel.findOne({ _id: feedId });
+    const index = feed.content.indexOf(freetId);
+    feed.content.splice(index, 1);
+    await feed.save();
+    return feed != null;
+  }
+
+  /**
+   * Remove a freet from all feeds
    *
    * @param {string} freetId - The id of freet to remove from all feeds
-   * @return {Promise<Boolean>} - false if the freet is in no documents, othherwise true
+   * @return {Promise<Boolean>} - false if the freet is in no documents, otherwise true
    */
   static async removeContent(freetId: Types.ObjectId): Promise<Boolean> {
     const feed = await FeedModel.find({ content: freetId });

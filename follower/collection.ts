@@ -2,6 +2,8 @@ import type { HydratedDocument, Types } from "mongoose";
 import type { Follower, PopulatedFollower } from "./model";
 import FollowerModel from "./model";
 import UserCollection from "../user/collection";
+import FreetCollection from "../freet/collection";
+import FeedCollection from "../feed/collection";
 
 class FollowerCollection {
   static async addOneByUsername(
@@ -16,6 +18,11 @@ class FollowerCollection {
       },
     });
     await follower.save();
+    const freets = await FreetCollection.findAllByUsername(username);
+    const feed = (await UserCollection.findOneByUserId(followerId)).feed;
+    freets.forEach(async (f) => {
+      FeedCollection.addContent(feed, f._id);
+    });
     return follower.populate({ path: "_id", populate: { path: "follower" } });
   }
   static async findAllByUsername(
@@ -41,6 +48,11 @@ class FollowerCollection {
     const follower = await FollowerModel.deleteOne({
       "_id.follower": followerId,
       "_id.followee": user._id,
+    });
+    const freets = await FreetCollection.findAllByUsername(username);
+    const feed = (await UserCollection.findOneByUserId(followerId)).feed;
+    freets.forEach(async (f) => {
+      FeedCollection.removeContentFromFeed(feed, f._id);
     });
     return follower !== null;
   }
