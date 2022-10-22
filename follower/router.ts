@@ -9,7 +9,12 @@ const router = express.Router();
 
 router.post(
   "/:username",
-  [userValidator.isUserLoggedIn, followerValidator.isNotFollower],
+  [
+    userValidator.isUserLoggedIn,
+    userValidator.isUserExists,
+    followerValidator.isNotFollower,
+    followerValidator.isNotSameUser,
+  ],
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? ""; // Will not be an empty string since its validated in isUserLoggedIn
     const follower = await FollowerCollection.addOneByUsername(
@@ -25,7 +30,11 @@ router.post(
 
 router.delete(
   "/:username",
-  [userValidator.isUserLoggedIn, followerValidator.isFollower],
+  [
+    userValidator.isUserLoggedIn,
+    userValidator.isUserExists,
+    followerValidator.isFollower,
+  ],
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? ""; // Will not be an empty string since its validated in isUserLoggedIn
     await FollowerCollection.deleteOneByUsername(userId, req.params.username);
@@ -35,12 +44,33 @@ router.delete(
   }
 );
 
-router.get("/:username", async (req: Request, res: Response) => {
-  const followers = await FollowerCollection.findAllByUsername(
-    req.params.username
-  );
-  const response = followers.map(util.constructFollowerResponse);
-  res.status(200).json(response);
+router.get(
+  "/:username",
+  [userValidator.isUserExists],
+  async (req: Request, res: Response) => {
+    const followers = await FollowerCollection.findAllByUsername(
+      req.params.username
+    );
+    const response = followers.map(util.constructFollowerResponse);
+    res.status(200).json(response);
+  }
+);
+
+router.get("/", (req: Request, res: Response) => {
+  res.status(400).json({
+    error: "Provided username must be nonempty.",
+  });
+});
+router.post("/", (req: Request, res: Response) => {
+  res.status(400).json({
+    error: "Provided username must be nonempty.",
+  });
+});
+
+router.delete("/", (req: Request, res: Response) => {
+  res.status(400).json({
+    error: "Provided username must be nonempty.",
+  });
 });
 
 export { router as followerRouter };

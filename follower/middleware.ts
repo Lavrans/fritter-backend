@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import { Types } from "mongoose";
+import UserCollection from "../user/collection";
 import FollowerCollection from "./collection";
 
 /**
@@ -46,4 +47,22 @@ const isNotFollower = async (
   next();
 };
 
-export { isFollower, isNotFollower };
+const isNotSameUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const user = await UserCollection.findOneByUsername(req.params.username);
+  if (user._id == req.session.userId) {
+    res.status(400).json({
+      error: {
+        alreadyFollower: `You cannot follow yourself`,
+      },
+    });
+    return;
+  }
+
+  next();
+};
+
+export { isFollower, isNotFollower, isNotSameUser };
