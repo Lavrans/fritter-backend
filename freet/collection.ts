@@ -24,7 +24,8 @@ class FreetCollection {
    */
   static async addOne(
     authorId: Types.ObjectId | string,
-    content: string
+    content: string,
+    friendsOnly: boolean
   ): Promise<HydratedDocument<Freet>> {
     const date = new Date();
     const freet = new FreetModel({
@@ -32,6 +33,7 @@ class FreetCollection {
       dateCreated: date,
       content,
       dateModified: date,
+      friendsOnly,
     });
     await freet.save(); // Saves freet to MongoDB
     const followers = await FollowerCollection.findAllById(authorId);
