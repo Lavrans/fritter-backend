@@ -2,6 +2,7 @@ import type { HydratedDocument, Types } from "mongoose";
 import type { Friend } from "./model";
 import FriendModel from "./model";
 import UserCollection from "../user/collection";
+import { User } from "../user/model";
 
 class FriendCollection {
   static async addOneByUserIds(
@@ -30,6 +31,18 @@ class FriendCollection {
     })
       .populate({ path: "_id", populate: { path: "user1" } })
       .populate({ path: "_id", populate: { path: "user2" } });
+  }
+  static async findAllById(
+    id: Types.ObjectId | string
+  ): Promise<Array<HydratedDocument<User>>> {
+    const friends: any = await FriendModel.find({
+      $or: [{ "_id.user1": id }, { "_id.user2": id }],
+    })
+      .populate({ path: "_id", populate: { path: "user1" } })
+      .populate({ path: "_id", populate: { path: "user2" } });
+    return await friends.map((f: any) =>
+      f._id.user1._id == id ? f._id.user2 : f._id.user1
+    );
   }
   static async deleteOne(
     id1: Types.ObjectId | string,

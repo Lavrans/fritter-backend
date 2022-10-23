@@ -21,7 +21,9 @@ class FollowerCollection {
     const freets = await FreetCollection.findAllByUsername(username);
     const feed = (await UserCollection.findOneByUserId(followerId)).feed;
     freets.forEach(async (f) => {
-      FeedCollection.addContent(feed, f._id);
+      if (!f.friendsOnly) {
+        FeedCollection.addContent(feed, f._id);
+      }
     });
     return follower.populate({ path: "_id", populate: { path: "follower" } });
   }

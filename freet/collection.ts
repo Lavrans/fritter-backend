@@ -5,6 +5,7 @@ import FreetModel from "./model";
 import UserCollection from "../user/collection";
 import FeedCollection from "../feed/collection";
 import FollowerCollection from "../follower/collection";
+import FriendCollection from "../friend/collection";
 
 /**
  * This files contains a class that has the functionality to explore freets
@@ -36,10 +37,17 @@ class FreetCollection {
       friendsOnly,
     });
     await freet.save(); // Saves freet to MongoDB
-    const followers = await FollowerCollection.findAllById(authorId);
-    followers.forEach(async (f) => {
-      FeedCollection.addContent(f._id.follower.feed, freet._id);
-    });
+    if (friendsOnly) {
+      const friends = await FriendCollection.findAllById(authorId);
+      friends.forEach(async (f) => {
+        FeedCollection.addContent(f.feed, freet._id);
+      });
+    } else {
+      const followers = await FollowerCollection.findAllById(authorId);
+      followers.forEach(async (f) => {
+        FeedCollection.addContent(f._id.follower.feed, freet._id);
+      });
+    }
     return freet.populate("authorId");
   }
 

@@ -66,7 +66,7 @@ class FeedCollection {
   ): Promise<Boolean> {
     const feed = await FeedModel.findOne({ _id: feedId });
     const index = feed.content.indexOf(freetId);
-    feed.content.splice(index, 1);
+    index >= 0 && feed.content.splice(index, 1);
     await feed.save();
     return feed != null;
   }
