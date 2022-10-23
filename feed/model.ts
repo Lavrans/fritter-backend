@@ -1,6 +1,6 @@
-import type { Types } from "mongoose";
-import { Schema, model } from "mongoose";
-import { Freet } from "../freet/model";
+import type {Types} from 'mongoose';
+import {Schema, model} from 'mongoose';
+import type {Freet} from '../freet/model';
 
 /**
  * This file defines the properties stored in a Feed
@@ -26,10 +26,10 @@ const FeedSchema = new Schema<Feed>({
     {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: "Freet",
-    },
-  ],
+      ref: 'Freet'
+    }
+  ]
 });
 
-const FeedModel = model<Feed>("Feed", FeedSchema);
+const FeedModel = model<Feed>('Feed', FeedSchema);
 export default FeedModel;

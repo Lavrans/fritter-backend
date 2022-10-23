@@ -1,7 +1,7 @@
-import type { Request, Response, NextFunction } from "express";
-import FreetCollection from "freet/collection";
-import { Types } from "mongoose";
-import ReplyCollection from "../reply/collection";
+import type {Request, Response, NextFunction} from 'express';
+import FreetCollection from 'freet/collection';
+import {Types} from 'mongoose';
+import ReplyCollection from '../reply/collection';
 
 /**
  * Checks if a reply with replyId is req.params exists
@@ -14,12 +14,12 @@ const isReplyExists = async (
   const validFormat = Types.ObjectId.isValid(req.params.replyId);
   const reply = validFormat
     ? await ReplyCollection.findOne(req.params.replyId)
-    : "";
+    : '';
   if (!reply) {
     res.status(404).json({
       error: {
-        replyNotFound: `Reply with reply ID ${req.params.replyId} does not exist.`,
-      },
+        replyNotFound: `Reply with reply ID ${req.params.replyId} does not exist.`
+      }
     });
     return;
   }
@@ -36,17 +36,17 @@ const isValidReplyContent = (
   res: Response,
   next: NextFunction
 ) => {
-  const { content } = req.body as { content: string };
+  const {content} = req.body as {content: string};
   if (!content.trim()) {
     res.status(400).json({
-      error: "Reply content must be at least one character long.",
+      error: 'Reply content must be at least one character long.'
     });
     return;
   }
 
   if (content.length > 140) {
     res.status(413).json({
-      error: "Reply content must be no more than 140 characters.",
+      error: 'Reply content must be no more than 140 characters.'
     });
     return;
   }
@@ -66,7 +66,7 @@ const isValidReplyModifier = async (
   const userId = reply.authorId._id;
   if (req.session.userId !== userId.toString()) {
     res.status(403).json({
-      error: "Cannot modify other users' replys.",
+      error: 'Cannot modify other users\' replys.'
     });
     return;
   }
@@ -74,4 +74,4 @@ const isValidReplyModifier = async (
   next();
 };
 
-export { isValidReplyContent, isReplyExists, isValidReplyModifier };
+export {isValidReplyContent, isReplyExists, isValidReplyModifier};

@@ -1,5 +1,5 @@
-import type { HydratedDocument } from "mongoose";
-import type { Follower, PopulatedFollower } from "./model";
+import type {HydratedDocument} from 'mongoose';
+import type {Follower, PopulatedFollower} from './model';
 
 // Update this if you add a property to the Follower type!
 type FollowerResponse = {
@@ -19,15 +19,15 @@ const constructFollowerResponse = (
 ): FollowerResponse => {
   const followerCopy: PopulatedFollower = {
     ...follower.toObject({
-      versionKey: false, // Cosmetics; prevents returning of __v property
-    }),
+      versionKey: false // Cosmetics; prevents returning of __v property
+    })
   };
   const followerUsername = followerCopy._id.follower.username;
   const followeeUsername = followerCopy._id.followee.username;
   return {
     follower: followerUsername,
-    followee: followeeUsername,
+    followee: followeeUsername
   };
 };
 
-export { constructFollowerResponse };
+export {constructFollowerResponse};

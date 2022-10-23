@@ -1,6 +1,6 @@
-import type { HydratedDocument, Types } from "mongoose";
-import type { Reply } from "./model";
-import ReplyModel from "./model";
+import type {HydratedDocument, Types} from 'mongoose';
+import type {Reply} from './model';
+import ReplyModel from './model';
 
 /**
  * This files contains a class that has the functionality to explore replies
@@ -31,10 +31,10 @@ class ReplyCollection {
       content,
       dateModified: date,
       parent,
-      parentType,
+      parentType
     });
     await reply.save(); // Saves reply to MongoDB
-    return reply.populate("authorId");
+    return reply.populate('authorId');
   }
 
   /**
@@ -44,12 +44,12 @@ class ReplyCollection {
    * @return {Promise<HydratedDocument<Reply>[]>} - An array of all of the replies to the freet
    */
   static async findAllRepliesToFreet(
-    freetId: Types.ObjectId | String
+    freetId: Types.ObjectId | string
   ): Promise<Array<HydratedDocument<Reply>>> {
     // Retrieves replies and sorts them from most to least recent
-    return ReplyModel.find({ parent: freetId })
-      .sort({ dateModified: -1 })
-      .populate("authorId");
+    return ReplyModel.find({parent: freetId})
+      .sort({dateModified: -1})
+      .populate('authorId');
   }
 
   /**
@@ -59,12 +59,12 @@ class ReplyCollection {
    * @return {Promise<HydratedDocument<Reply>[]>} - An array of all of the replies to the reply
    */
   static async findAllRepliesToReply(
-    replyId: Types.ObjectId | String
+    replyId: Types.ObjectId | string
   ): Promise<Array<HydratedDocument<Reply>>> {
     // Retrieves replies and sorts them from most to least recent
-    return ReplyModel.find({ parent: replyId })
-      .sort({ dateModified: -1 })
-      .populate("authorId");
+    return ReplyModel.find({parent: replyId})
+      .sort({dateModified: -1})
+      .populate('authorId');
   }
 
   /**
@@ -75,7 +75,7 @@ class ReplyCollection {
   static async findOne(
     replyId: Types.ObjectId | string
   ): Promise<HydratedDocument<Reply>> {
-    return ReplyModel.findOne({ _id: replyId }).populate("authorId");
+    return ReplyModel.findOne({_id: replyId}).populate('authorId');
   }
 
   /**
@@ -89,11 +89,11 @@ class ReplyCollection {
     replyId: Types.ObjectId | string,
     content: string
   ): Promise<HydratedDocument<Reply>> {
-    const reply = await ReplyModel.findOne({ _id: replyId });
+    const reply = await ReplyModel.findOne({_id: replyId});
     reply.content = content;
     reply.dateModified = new Date();
     await reply.save();
-    return reply.populate("authorId");
+    return reply.populate('authorId');
   }
 
   /**
@@ -103,7 +103,7 @@ class ReplyCollection {
    * @return {Promise<Boolean>} - true if the reply has been deleted, false otherwise
    */
   static async deleteOne(replyId: Types.ObjectId | string): Promise<boolean> {
-    const reply = await ReplyModel.deleteOne({ _id: replyId });
+    const reply = await ReplyModel.deleteOne({_id: replyId});
     return reply !== null;
   }
 
@@ -113,7 +113,7 @@ class ReplyCollection {
    * @param {string} authorId - The id of author of replies
    */
   static async deleteMany(authorId: Types.ObjectId | string): Promise<void> {
-    await ReplyModel.deleteMany({ authorId });
+    await ReplyModel.deleteMany({authorId});
   }
 }
 

@@ -1,7 +1,7 @@
-import type { Request, Response, NextFunction } from "express";
-import { Types } from "mongoose";
-import UserCollection from "../user/collection";
-import FollowerCollection from "./collection";
+import type {Request, Response, NextFunction} from 'express';
+import {Types} from 'mongoose';
+import UserCollection from '../user/collection';
+import FollowerCollection from './collection';
 
 /**
  * Check that user is a follower
@@ -14,8 +14,8 @@ const isFollower = async (req: Request, res: Response, next: NextFunction) => {
   if (!follower) {
     res.status(400).json({
       error: {
-        alreadyFollower: `You need to be a follower of ${req.params.username}.`,
-      },
+        alreadyFollower: `You need to be a follower of ${req.params.username}.`
+      }
     });
     return;
   }
@@ -38,8 +38,8 @@ const isNotFollower = async (
   if (follower) {
     res.status(400).json({
       error: {
-        alreadyFollower: `You are already a follower of ${req.params.username}.`,
-      },
+        alreadyFollower: `You are already a follower of ${req.params.username}.`
+      }
     });
     return;
   }
@@ -56,8 +56,8 @@ const isNotSameUser = async (
   if (user._id == req.session.userId) {
     res.status(400).json({
       error: {
-        alreadyFollower: `You cannot follow yourself`,
-      },
+        alreadyFollower: 'You cannot follow yourself'
+      }
     });
     return;
   }
@@ -65,4 +65,4 @@ const isNotSameUser = async (
   next();
 };
 
-export { isFollower, isNotFollower, isNotSameUser };
+export {isFollower, isNotFollower, isNotSameUser};

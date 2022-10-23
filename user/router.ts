@@ -1,12 +1,12 @@
-import type { Request, Response } from "express";
-import express from "express";
-import FreetCollection from "../freet/collection";
-import UserCollection from "./collection";
-import * as userValidator from "../user/middleware";
-import * as util from "./util";
-import ReplyCollection from "../reply/collection";
-import FollowerCollection from "../follower/collection";
-import FriendCollection from "../friend/collection";
+import type {Request, Response} from 'express';
+import express from 'express';
+import FreetCollection from '../freet/collection';
+import UserCollection from './collection';
+import * as userValidator from '../user/middleware';
+import * as util from './util';
+import ReplyCollection from '../reply/collection';
+import FollowerCollection from '../follower/collection';
+import FriendCollection from '../friend/collection';
 
 const router = express.Router();
 
@@ -25,12 +25,12 @@ const router = express.Router();
  *
  */
 router.post(
-  "/session",
+  '/session',
   [
     userValidator.isUserLoggedOut,
     userValidator.isValidUsername,
     userValidator.isValidPassword,
-    userValidator.isAccountExists,
+    userValidator.isAccountExists
   ],
   async (req: Request, res: Response) => {
     const user = await UserCollection.findOneByUsernameAndPassword(
@@ -39,8 +39,8 @@ router.post(
     );
     req.session.userId = user._id.toString();
     res.status(201).json({
-      message: "You have logged in successfully",
-      user: util.constructUserResponse(user),
+      message: 'You have logged in successfully',
+      user: util.constructUserResponse(user)
     });
   }
 );
@@ -55,12 +55,12 @@ router.post(
  *
  */
 router.delete(
-  "/session",
+  '/session',
   [userValidator.isUserLoggedIn],
   (req: Request, res: Response) => {
     req.session.userId = undefined;
     res.status(200).json({
-      message: "You have been logged out successfully.",
+      message: 'You have been logged out successfully.'
     });
   }
 );
@@ -79,12 +79,12 @@ router.delete(
  *
  */
 router.post(
-  "/",
+  '/',
   [
     userValidator.isUserLoggedOut,
     userValidator.isValidUsername,
     userValidator.isUsernameNotAlreadyInUse,
-    userValidator.isValidPassword,
+    userValidator.isValidPassword
   ],
   async (req: Request, res: Response) => {
     const user = await UserCollection.addOne(
@@ -94,7 +94,7 @@ router.post(
     req.session.userId = user._id.toString();
     res.status(201).json({
       message: `Your account was created successfully. You have been logged in as ${user.username}`,
-      user: util.constructUserResponse(user),
+      user: util.constructUserResponse(user)
     });
   }
 );
@@ -112,19 +112,19 @@ router.post(
  * @throws {400} - If username or password are not of the correct format
  */
 router.put(
-  "/",
+  '/',
   [
     userValidator.isUserLoggedIn,
     userValidator.isValidUsername,
     userValidator.isUsernameNotAlreadyInUse,
-    userValidator.isValidPassword,
+    userValidator.isValidPassword
   ],
   async (req: Request, res: Response) => {
-    const userId = (req.session.userId as string) ?? ""; // Will not be an empty string since its validated in isUserLoggedIn
+    const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
     const user = await UserCollection.updateOne(userId, req.body);
     res.status(200).json({
-      message: "Your profile was updated successfully.",
-      user: util.constructUserResponse(user),
+      message: 'Your profile was updated successfully.',
+      user: util.constructUserResponse(user)
     });
   }
 );
@@ -138,10 +138,10 @@ router.put(
  * @throws {403} - If the user is not logged in
  */
 router.delete(
-  "/",
+  '/',
   [userValidator.isUserLoggedIn],
   async (req: Request, res: Response) => {
-    const userId = (req.session.userId as string) ?? ""; // Will not be an empty string since its validated in isUserLoggedIn
+    const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
     await UserCollection.deleteOne(userId);
     await FreetCollection.deleteMany(userId);
     await ReplyCollection.deleteMany(userId);
@@ -149,9 +149,9 @@ router.delete(
     await FriendCollection.deleteAllByUserId(userId);
     req.session.userId = undefined;
     res.status(200).json({
-      message: "Your account has been deleted successfully.",
+      message: 'Your account has been deleted successfully.'
     });
   }
 );
 
-export { router as userRouter };
+export {router as userRouter};

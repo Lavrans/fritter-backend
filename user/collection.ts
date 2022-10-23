@@ -1,7 +1,7 @@
-import FeedCollection from "../feed/collection";
-import type { HydratedDocument, Types } from "mongoose";
-import type { User } from "./model";
-import UserModel from "./model";
+import FeedCollection from '../feed/collection';
+import type {HydratedDocument, Types} from 'mongoose';
+import type {User} from './model';
+import UserModel from './model';
 
 /**
  * This file contains a class with functionality to interact with users stored
@@ -30,7 +30,7 @@ class UserCollection {
       username,
       password,
       dateJoined,
-      feed: feed._id,
+      feed: feed._id
     });
     await user.save(); // Saves user to MongoDB
     return user;
@@ -45,7 +45,7 @@ class UserCollection {
   static async findOneByUserId(
     userId: Types.ObjectId | string
   ): Promise<HydratedDocument<User>> {
-    return UserModel.findOne({ _id: userId });
+    return UserModel.findOne({_id: userId});
   }
 
   /**
@@ -58,7 +58,7 @@ class UserCollection {
     username: string
   ): Promise<HydratedDocument<User>> {
     return UserModel.findOne({
-      username: new RegExp(`^${username.trim()}$`, "i"),
+      username: new RegExp(`^${username.trim()}$`, 'i')
     });
   }
 
@@ -74,8 +74,8 @@ class UserCollection {
     password: string
   ): Promise<HydratedDocument<User>> {
     return UserModel.findOne({
-      username: new RegExp(`^${username.trim()}$`, "i"),
-      password,
+      username: new RegExp(`^${username.trim()}$`, 'i'),
+      password
     });
   }
 
@@ -90,7 +90,7 @@ class UserCollection {
     userId: Types.ObjectId | string,
     userDetails: any
   ): Promise<HydratedDocument<User>> {
-    const user = await UserModel.findOne({ _id: userId });
+    const user = await UserModel.findOne({_id: userId});
     if (userDetails.password) {
       user.password = userDetails.password as string;
     }
@@ -110,7 +110,7 @@ class UserCollection {
    * @return {Promise<Boolean>} - true if the user has been deleted, false otherwise
    */
   static async deleteOne(userId: Types.ObjectId | string): Promise<boolean> {
-    const user = await UserModel.findOne({ _id: userId });
+    const user = await UserModel.findOne({_id: userId});
     await FeedCollection.deleteFeed(user.feed);
     await user.delete();
     return user !== null;

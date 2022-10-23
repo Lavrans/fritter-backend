@@ -1,13 +1,13 @@
-import FriendCollection from "../friend/collection";
-import type { Types } from "mongoose";
-import { Schema, model } from "mongoose";
-import type { User } from "../user/model";
+import FriendCollection from '../friend/collection';
+import type {Types} from 'mongoose';
+import {Schema, model} from 'mongoose';
+import type {User} from '../user/model';
 
 export type Follower = {
-  _id: { follower: Types.ObjectId; followee: Types.ObjectId };
+  _id: {follower: Types.ObjectId; followee: Types.ObjectId};
 };
 export type PopulatedFollower = {
-  _id: { follower: User; followee: User };
+  _id: {follower: User; followee: User};
 };
 
 const FollowerSchema = new Schema<Follower>({
@@ -15,31 +15,32 @@ const FollowerSchema = new Schema<Follower>({
     follower: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: "User",
+      ref: 'User'
     },
     followee: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: "User",
-    },
-  },
+      ref: 'User'
+    }
+  }
 });
 
-FollowerSchema.pre("save", async function (this: any, next) {
+FollowerSchema.pre('save', async function (this: any, next) {
   const follower = await FollowerModel.findOne({
-    "_id.follower": this._id.followee.toString(),
-    "_id.followee": this._id.follower.toString(),
+    '_id.follower': this._id.followee.toString(),
+    '_id.followee': this._id.follower.toString()
   }).exec();
   if (follower !== null) {
     FriendCollection.addOneByUserIds(this._id.follower, this._id.followee);
   }
+
   next();
 });
-FollowerSchema.pre("deleteOne", async function (this: any, next) {
+FollowerSchema.pre('deleteOne', async function (this: any, next) {
   const query = await this.getQuery();
-  FriendCollection.deleteOne(query["_id.follower"], query["_id.followee"]);
+  FriendCollection.deleteOne(query['_id.follower'], query['_id.followee']);
   next();
 });
 
-const FollowerModel = model<Follower>("Follower", FollowerSchema);
+const FollowerModel = model<Follower>('Follower', FollowerSchema);
 export default FollowerModel;

@@ -1,6 +1,6 @@
-import type { HydratedDocument } from "mongoose";
-import type { Feed, PopulatedFeed } from "../feed/model";
-import { Freet } from "../freet/model";
+import type {HydratedDocument} from 'mongoose';
+import type {Feed, PopulatedFeed} from '../feed/model';
+import type {Freet} from '../freet/model';
 
 type FeedResponse = {
   _id: string;
@@ -17,16 +17,16 @@ type FeedResponse = {
 const constructFeedResponse = (feed: HydratedDocument<Feed>): FeedResponse => {
   const feedCopy: PopulatedFeed = {
     ...feed.toObject({
-      versionKey: false, // Cosmetics; prevents returning of __v property
-    }),
+      versionKey: false // Cosmetics; prevents returning of __v property
+    })
   };
   const content = feedCopy.content.sort(
     (a, b) => b.dateModified.getTime() - a.dateModified.getTime()
   );
   return {
     _id: feedCopy._id.toString(),
-    content,
+    content
   };
 };
 
-export { constructFeedResponse };
+export {constructFeedResponse};

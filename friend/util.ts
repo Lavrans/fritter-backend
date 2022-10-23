@@ -1,5 +1,5 @@
-import type { HydratedDocument, Types } from "mongoose";
-import type { Friend, PopulatedFriend } from "./model";
+import type {HydratedDocument, Types} from 'mongoose';
+import type {Friend, PopulatedFriend} from './model';
 
 // Update this if you add a property to the Friend type!
 type FriendResponse = {
@@ -19,17 +19,17 @@ const constructFriendResponse = (
 ): FriendResponse => {
   const friendCopy: PopulatedFriend = {
     ...friend.toObject({
-      versionKey: false, // Cosmetics; prevents returning of __v property
-    }),
+      versionKey: false // Cosmetics; prevents returning of __v property
+    })
   };
   console.log(userId, friendCopy._id.user1._id.toString());
-  const user =
-    userId == friendCopy._id.user1._id.toString()
+  const user
+    = userId == friendCopy._id.user1._id.toString()
       ? friendCopy._id.user2.username
       : friendCopy._id.user1.username;
   return {
-    user: user,
+    user
   };
 };
 
-export { constructFriendResponse };
+export {constructFriendResponse};

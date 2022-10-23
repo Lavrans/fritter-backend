@@ -1,10 +1,10 @@
-import type { NextFunction, Request, Response } from "express";
-import express from "express";
-import ReplyCollection from "./collection";
-import * as userValidator from "../user/middleware";
-import * as replyValidator from "../reply/middleware";
-import * as freetValidator from "../freet/middleware";
-import * as util from "./util";
+import type {NextFunction, Request, Response} from 'express';
+import express from 'express';
+import ReplyCollection from './collection';
+import * as userValidator from '../user/middleware';
+import * as replyValidator from '../reply/middleware';
+import * as freetValidator from '../freet/middleware';
+import * as util from './util';
 
 const router = express.Router();
 
@@ -17,7 +17,7 @@ const router = express.Router();
  *                      order by date modified
  */
 router.get(
-  "/freet/:freetId",
+  '/freet/:freetId',
   [freetValidator.isFreetExists],
   async (req: Request, res: Response) => {
     const replies = await ReplyCollection.findAllRepliesToFreet(
@@ -37,7 +37,7 @@ router.get(
  *                      order by date modified
  */
 router.get(
-  "/reply/:replyId",
+  '/reply/:replyId',
   [replyValidator.isReplyExists],
   async (req: Request, res: Response) => {
     const replies = await ReplyCollection.findAllRepliesToReply(
@@ -61,24 +61,24 @@ router.get(
  * @throws {413} - If the reply content is more than 140 characters long
  */
 router.post(
-  "/freet/:freetId",
+  '/freet/:freetId',
   [
     userValidator.isUserLoggedIn,
     replyValidator.isValidReplyContent,
-    freetValidator.isFreetExists,
+    freetValidator.isFreetExists
   ],
   async (req: Request, res: Response) => {
-    const userId = (req.session.userId as string) ?? ""; // Will not be an empty string since its validated in isUserLoggedIn
+    const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
     const reply = await ReplyCollection.addOne(
       userId,
       req.body.content,
       req.params.freetId,
-      "Freet"
+      'Freet'
     );
 
     res.status(201).json({
-      message: "Your reply was created successfully.",
-      reply: util.constructReplyResponse(reply),
+      message: 'Your reply was created successfully.',
+      reply: util.constructReplyResponse(reply)
     });
   }
 );
@@ -96,24 +96,24 @@ router.post(
  * @throws {413} - If the reply content is more than 140 characters long
  */
 router.post(
-  "/reply/:replyId",
+  '/reply/:replyId',
   [
     userValidator.isUserLoggedIn,
     replyValidator.isValidReplyContent,
-    replyValidator.isReplyExists,
+    replyValidator.isReplyExists
   ],
   async (req: Request, res: Response) => {
-    const userId = (req.session.userId as string) ?? ""; // Will not be an empty string since its validated in isUserLoggedIn
+    const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
     const reply = await ReplyCollection.addOne(
       userId,
       req.body.content,
       req.params.replyId,
-      "Reply"
+      'Reply'
     );
 
     res.status(201).json({
-      message: "Your reply was created successfully.",
-      reply: util.constructReplyResponse(reply),
+      message: 'Your reply was created successfully.',
+      reply: util.constructReplyResponse(reply)
     });
   }
 );
@@ -129,16 +129,16 @@ router.post(
  * @throws {404} - If the replyId is not valid
  */
 router.delete(
-  "/:replyId?",
+  '/:replyId?',
   [
     userValidator.isUserLoggedIn,
     replyValidator.isReplyExists,
-    replyValidator.isValidReplyModifier,
+    replyValidator.isValidReplyModifier
   ],
   async (req: Request, res: Response) => {
     await ReplyCollection.deleteOne(req.params.replyId);
     res.status(200).json({
-      message: "Your reply was deleted successfully.",
+      message: 'Your reply was deleted successfully.'
     });
   }
 );
@@ -157,12 +157,12 @@ router.delete(
  * @throws {413} - If the reply content is more than 140 characters long
  */
 router.put(
-  "/:replyId?",
+  '/:replyId?',
   [
     userValidator.isUserLoggedIn,
     replyValidator.isReplyExists,
     replyValidator.isValidReplyModifier,
-    replyValidator.isValidReplyContent,
+    replyValidator.isValidReplyContent
   ],
   async (req: Request, res: Response) => {
     const reply = await ReplyCollection.updateOne(
@@ -170,10 +170,10 @@ router.put(
       req.body.content
     );
     res.status(200).json({
-      message: "Your reply was updated successfully.",
-      reply: util.constructReplyResponse(reply),
+      message: 'Your reply was updated successfully.',
+      reply: util.constructReplyResponse(reply)
     });
   }
 );
 
-export { router as replyRouter };
+export {router as replyRouter};

@@ -1,6 +1,6 @@
-import type { Request, Response, NextFunction } from "express";
-import { Types } from "mongoose";
-import UserCollection from "../user/collection";
+import type {Request, Response, NextFunction} from 'express';
+import {Types} from 'mongoose';
+import UserCollection from '../user/collection';
 
 /**
  * Checks if the current session user (if any) still exists in the database, for instance,
@@ -19,8 +19,8 @@ const isCurrentSessionUserExists = async (
       req.session.userId = undefined;
       res.status(500).json({
         error: {
-          userNotFound: "User session was not recognized.",
-        },
+          userNotFound: 'User session was not recognized.'
+        }
       });
       return;
     }
@@ -37,8 +37,8 @@ const isValidUsername = (req: Request, res: Response, next: NextFunction) => {
   if (!usernameRegex.test(req.body.username)) {
     res.status(400).json({
       error: {
-        username: "Username must be a nonempty alphanumeric string.",
-      },
+        username: 'Username must be a nonempty alphanumeric string.'
+      }
     });
     return;
   }
@@ -54,8 +54,8 @@ const isValidPassword = (req: Request, res: Response, next: NextFunction) => {
   if (!passwordRegex.test(req.body.password)) {
     res.status(400).json({
       error: {
-        password: "Password must be a nonempty string.",
-      },
+        password: 'Password must be a nonempty string.'
+      }
     });
     return;
   }
@@ -71,7 +71,7 @@ const isAccountExists = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { username, password } = req.body as {
+  const {username, password} = req.body as {
     username: string;
     password: string;
   };
@@ -81,8 +81,8 @@ const isAccountExists = async (
       .status(400)
       .json({
         error: `Missing ${
-          username ? "password" : "username"
-        } credentials for sign in.`,
+          username ? 'password' : 'username'
+        } credentials for sign in.`
       });
     return;
   }
@@ -95,7 +95,7 @@ const isAccountExists = async (
   if (user) {
     next();
   } else {
-    res.status(401).json({ error: "Invalid user login credentials provided." });
+    res.status(401).json({error: 'Invalid user login credentials provided.'});
   }
 };
 
@@ -118,8 +118,8 @@ const isUsernameNotAlreadyInUse = async (
 
   res.status(409).json({
     error: {
-      username: "An account with this username already exists.",
-    },
+      username: 'An account with this username already exists.'
+    }
   });
 };
 
@@ -130,8 +130,8 @@ const isUserLoggedIn = (req: Request, res: Response, next: NextFunction) => {
   if (!req.session.userId) {
     res.status(403).json({
       error: {
-        auth: "You must be logged in to complete this action.",
-      },
+        auth: 'You must be logged in to complete this action.'
+      }
     });
     return;
   }
@@ -145,7 +145,7 @@ const isUserLoggedIn = (req: Request, res: Response, next: NextFunction) => {
 const isUserLoggedOut = (req: Request, res: Response, next: NextFunction) => {
   if (req.session.userId) {
     res.status(403).json({
-      error: "You are already signed in.",
+      error: 'You are already signed in.'
     });
     return;
   }
@@ -163,7 +163,7 @@ const isAuthorExists = async (
 ) => {
   if (!req.query.author) {
     res.status(400).json({
-      error: "Provided author username must be nonempty.",
+      error: 'Provided author username must be nonempty.'
     });
     return;
   }
@@ -175,7 +175,7 @@ const isAuthorExists = async (
     res.status(404).json({
       error: `A user with username ${
         req.query.author as string
-      } does not exist.`,
+      } does not exist.`
     });
     return;
   }
@@ -189,13 +189,13 @@ const isUserExists = async (
   next: NextFunction
 ) => {
   const user = await UserCollection.findOneByUsername(
-    req.params.username as string
+    req.params.username
   );
   if (!user) {
     res.status(404).json({
       error: `A user with username ${
-        req.params.username as string
-      } does not exist.`,
+        req.params.username
+      } does not exist.`
     });
     return;
   }
@@ -212,5 +212,5 @@ export {
   isAuthorExists,
   isValidUsername,
   isValidPassword,
-  isUserExists,
+  isUserExists
 };

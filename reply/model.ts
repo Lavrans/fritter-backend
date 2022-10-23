@@ -1,7 +1,7 @@
-import { Freet } from "freet/model";
-import type { Types, PopulatedDoc, Document } from "mongoose";
-import { Schema, model } from "mongoose";
-import type { User } from "../user/model";
+import {Freet} from 'freet/model';
+import type {Types, PopulatedDoc, Document} from 'mongoose';
+import {Schema, model} from 'mongoose';
+import type {User} from '../user/model';
 
 /**
  * This file defines the properties stored in a Reply
@@ -38,56 +38,56 @@ const ReplySchema = new Schema<Reply>({
     // Use Types.ObjectId outside of the schema
     type: Schema.Types.ObjectId,
     required: true,
-    ref: "User",
+    ref: 'User'
   },
   // The date the reply was created
   dateCreated: {
     type: Date,
-    required: true,
+    required: true
   },
   // The content of the reply
   content: {
     type: String,
-    required: true,
+    required: true
   },
   // The date the reply was modified
   dateModified: {
     type: Date,
-    required: true,
+    required: true
   },
   parent: {
     type: Schema.Types.ObjectId,
     required: true,
-    refPath: "parentType",
+    refPath: 'parentType'
   },
   parentType: {
     type: String,
-    enum: ["Freet", "Reply"],
-    required: true,
-  },
+    enum: ['Freet', 'Reply'],
+    required: true
+  }
 });
 
-ReplySchema.pre("deleteOne", async function (this: any, next) {
+ReplySchema.pre('deleteOne', async function (this: any, next) {
   const query = this.getQuery();
   await ReplyModel.deleteMany({
     parent: query._id,
-    parentType: "Reply",
+    parentType: 'Reply'
   }).exec();
   next();
 });
-ReplySchema.pre("deleteMany", async function (this: any, next) {
+ReplySchema.pre('deleteMany', async function (this: any, next) {
   const query = this.getQuery();
   const replies = await ReplyModel.find({
     parent: query.parent,
-    parentType: query.parentType,
+    parentType: query.parentType
   });
-  replies.forEach(async (r) => {
+  replies.forEach(async r => {
     await ReplyModel.deleteOne({
-      _id: r._id,
+      _id: r._id
     }).exec();
   });
   next();
 });
 
-const ReplyModel = model<Reply>("Reply", ReplySchema);
+const ReplyModel = model<Reply>('Reply', ReplySchema);
 export default ReplyModel;

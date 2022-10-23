@@ -1,6 +1,6 @@
-import type { HydratedDocument, Types } from "mongoose";
-import type { Feed } from "./model";
-import FeedModel from "./model";
+import type {HydratedDocument, Types} from 'mongoose';
+import type {Feed} from './model';
+import FeedModel from './model';
 
 /**
  * This files contains a class that has the functionality to explore feeds
@@ -18,7 +18,7 @@ class FeedCollection {
    */
   static async addOne(): Promise<HydratedDocument<Feed>> {
     const feed = new FeedModel({
-      content: [],
+      content: []
     });
     await feed.save(); // Saves feed to MongoDB
     return feed;
@@ -33,7 +33,7 @@ class FeedCollection {
   static async findOne(
     feedId: Types.ObjectId | string
   ): Promise<HydratedDocument<Feed>> {
-    return FeedModel.findOne({ _id: feedId }).populate("content");
+    return FeedModel.findOne({_id: feedId}).populate('content');
   }
 
   /**
@@ -47,10 +47,10 @@ class FeedCollection {
     feedId: Types.ObjectId | string,
     content: Types.ObjectId
   ): Promise<HydratedDocument<Feed>> {
-    const feed = await FeedModel.findOne({ _id: feedId });
+    const feed = await FeedModel.findOne({_id: feedId});
     feed.content.push(content);
     await feed.save();
-    return feed.populate("content");
+    return feed.populate('content');
   }
 
   /**
@@ -63,8 +63,8 @@ class FeedCollection {
   static async removeContentFromFeed(
     feedId: Types.ObjectId | string,
     freetId: Types.ObjectId
-  ): Promise<Boolean> {
-    const feed = await FeedModel.findOne({ _id: feedId });
+  ): Promise<boolean> {
+    const feed = await FeedModel.findOne({_id: feedId});
     const index = feed.content.indexOf(freetId);
     index >= 0 && feed.content.splice(index, 1);
     await feed.save();
@@ -77,9 +77,9 @@ class FeedCollection {
    * @param {string} freetId - The id of freet to remove from all feeds
    * @return {Promise<Boolean>} - false if the freet is in no documents, otherwise true
    */
-  static async removeContent(freetId: Types.ObjectId): Promise<Boolean> {
-    const feed = await FeedModel.find({ content: freetId });
-    feed.forEach(async (f) => {
+  static async removeContent(freetId: Types.ObjectId): Promise<boolean> {
+    const feed = await FeedModel.find({content: freetId});
+    feed.forEach(async f => {
       const index = f.content.indexOf(freetId);
       f.content.splice(index, 1);
       await f.save();
@@ -93,7 +93,7 @@ class FeedCollection {
    * @param {string} feedId - The id of the feed to delete
    */
   static async deleteFeed(feedId: Types.ObjectId | string): Promise<void> {
-    await FeedModel.deleteOne({ _id: feedId });
+    await FeedModel.deleteOne({_id: feedId});
   }
 }
 

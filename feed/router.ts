@@ -1,8 +1,8 @@
-import type { Request, Response } from "express";
-import express from "express";
-import FeedCollection from "./collection";
-import * as util from "./util";
-import * as feedValidator from "./middleware";
+import type {Request, Response} from 'express';
+import express from 'express';
+import FeedCollection from './collection';
+import * as util from './util';
+import * as feedValidator from './middleware';
 
 const router = express.Router();
 
@@ -16,21 +16,21 @@ const router = express.Router();
  * @throws {400} - If the feedId is empty or a stream of empty spaces
  */
 router.get(
-  "/:feedId",
+  '/:feedId',
   [feedValidator.isFeedExists],
   async (req: Request, res: Response) => {
     const feed = await FeedCollection.findOne(req.params.feedId);
     res.status(200).json({
-      message: "Success",
-      feed: util.constructFeedResponse(feed),
+      message: 'Success',
+      feed: util.constructFeedResponse(feed)
     });
   }
 );
 
-router.get("/", (req: Request, res: Response) => {
+router.get('/', (req: Request, res: Response) => {
   res.status(400).json({
-    error: "Provided feedId must be nonempty.",
+    error: 'Provided feedId must be nonempty.'
   });
 });
 
-export { router as feedRouter };
+export {router as feedRouter};

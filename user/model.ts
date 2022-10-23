@@ -1,5 +1,5 @@
-import type { Types } from "mongoose";
-import { Schema, model } from "mongoose";
+import type {Types} from 'mongoose';
+import {Schema, model} from 'mongoose';
 
 /**
  * This file defines the properties stored in a User
@@ -22,24 +22,24 @@ const UserSchema = new Schema({
   // The user's username
   username: {
     type: String,
-    required: true,
+    required: true
   },
   // The user's password
   password: {
     type: String,
-    required: true,
+    required: true
   },
   // The date the user joined
   dateJoined: {
     type: Date,
-    required: true,
+    required: true
   },
   feed: {
     type: Schema.Types.ObjectId,
     required: true,
-    ref: "Feed",
-  },
+    ref: 'Feed'
+  }
 });
 
-const UserModel = model<User>("User", UserSchema);
+const UserModel = model<User>('User', UserSchema);
 export default UserModel;
