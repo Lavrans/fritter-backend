@@ -1,7 +1,7 @@
-import CommunityCollection from '../community/collection';
-import type {Request, Response, NextFunction} from 'express';
-import {Types} from 'mongoose';
-import FreetCollection from '../freet/collection';
+import CommunityCollection from "../community/collection";
+import type { Request, Response, NextFunction } from "express";
+import { Types } from "mongoose";
+import FreetCollection from "../freet/collection";
 
 /**
  * Checks if a freet with freetId is req.params exists
@@ -14,12 +14,12 @@ const isFreetExists = async (
   const validFormat = Types.ObjectId.isValid(req.params.freetId);
   const freet = validFormat
     ? await FreetCollection.findOne(req.params.freetId)
-    : '';
+    : "";
   if (!freet) {
     res.status(404).json({
       error: {
-        freetNotFound: `Freet with freet ID ${req.params.freetId} does not exist.`
-      }
+        freetNotFound: `Freet with freet ID ${req.params.freetId} does not exist.`,
+      },
     });
     return;
   }
@@ -33,14 +33,17 @@ const isCommunityFreetInValidCommunity = async (
   next: NextFunction
 ) => {
   if (req.body.community != undefined) {
-    const community = await CommunityCollection.findOneByCommunityId(
-      req.body.community
-    );
+    let community = null;
+    try {
+      community = await CommunityCollection.findOneByCommunityId(
+        req.body.community
+      );
+    } catch {}
     if (!community) {
       res.status(404).json({
         error: {
-          freetNotFound: `Community with community ID ${req.body.community} does not exist.`
-        }
+          freetNotFound: `Community with community ID ${req.body.community} does not exist.`,
+        },
       });
       return;
     }
@@ -58,17 +61,17 @@ const isValidFreetContent = (
   res: Response,
   next: NextFunction
 ) => {
-  const {content} = req.body as {content: string};
+  const { content } = req.body as { content: string };
   if (!content.trim()) {
     res.status(400).json({
-      error: 'Freet content must be at least one character long.'
+      error: "Freet content must be at least one character long.",
     });
     return;
   }
 
   if (content.length > 140) {
     res.status(413).json({
-      error: 'Freet content must be no more than 140 characters.'
+      error: "Freet content must be no more than 140 characters.",
     });
     return;
   }
@@ -88,7 +91,7 @@ const isValidFreetModifier = async (
   const userId = freet.authorId._id;
   if (req.session.userId !== userId.toString()) {
     res.status(403).json({
-      error: 'Cannot modify other users\' freets.'
+      error: "Cannot modify other users' freets.",
     });
     return;
   }
@@ -100,5 +103,5 @@ export {
   isValidFreetContent,
   isFreetExists,
   isValidFreetModifier,
-  isCommunityFreetInValidCommunity
+  isCommunityFreetInValidCommunity,
 };

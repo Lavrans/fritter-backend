@@ -195,8 +195,10 @@ This renders the `index.html` file that will be used to interact with the backen
 #### `POST /api/freets` - Create a new freet
 
 **Body**
-
+friendsOnly and community are both optional
 - `content` _{string}_ - The content of the freet
+- `friendsOnly` {boolean} - An attribute for whether or not the post is public
+- `community` {string} - The id of a community
 
 **Returns**
 
@@ -411,7 +413,7 @@ This renders the `index.html` file that will be used to interact with the backen
 
 **Throws**
 
-- `400` if no userId is given
+- `400` if no username is given
 - `404` if there is no user with username
 
 #### `POST /api/followers/:username` - Create a new follower-relationship
@@ -463,7 +465,11 @@ This renders the `index.html` file that will be used to interact with the backen
 - `400` if no feedId is given
 - `404` if feedId is invalid
 
-#### `Get /api/communities/:communityId` - Get a community
+#### `POST /api/communities/` - Create a community
+
+**Body**
+
+- `name` _{string}_ - The name of the community
 
 **Returns**
 
@@ -471,14 +477,25 @@ This renders the `index.html` file that will be used to interact with the backen
 
 **Throws**
 
-- `400` if no communityId is given
-- `404` if communityId is invalid
+- `403` if the user is not logged in
+- `409` if the community name already exists
+	- `400` if no community name is given
+
+#### `Get /api/communities/:communityName` - Get a community
+
+**Returns**
+
+- A community object
+
+**Throws**
+
+- `404` if communityName is invalid
 
 #### `Get /api/communities/` - Get all the communities
 
 **Returns**
 
-- An array of objects containing community- ids and names sorted by number of members in descending order
+- An array of objects containing community-ids and names sorted by number of members in descending order
 
 #### `PUT /api/communities/:communityId?action=[join | leave]` - Join or leave a community (add/remove from community's members collection)
 
@@ -489,15 +506,13 @@ This renders the `index.html` file that will be used to interact with the backen
 **Throws**
 
 - `403` if the user is not logged in
+- `403` if the community owner tries to leave
 - `404` if the communityId is invalid
 - `400` if the action is leave and the user is not in community members
 - `400` if the action is join and the user is already in community members
+- `400` if the action is invalid
 
-#### `PUT /api/communities/:communityId/owner - Change community owner
-
-**Body**
-
-- `userId` _{string}_ - The id of the new owner
+#### `PUT /api/communities/:communityId/:username - Change community owner
 
 **Returns**
 
@@ -508,8 +523,9 @@ This renders the `index.html` file that will be used to interact with the backen
 - `401` if the requesting user is not the community owner
 - `403` if the user is not logged in
 - `404` if the communityId is invalid
+- `404` if the user does not exist
 
-#### `DELETE /api/communities/:communityId?` - Delete a community
+#### `DELETE /api/communities/:communityId` - Delete a community
 
 **Returns**
 
