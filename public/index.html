@@ -10,6 +10,7 @@
     <script src="/scripts/reply.js"></script>
     <script src="/scripts/friend.js"></script>
     <script src="/scripts/feed.js"></script>
+    <script src="/scripts/community.js"></script>
     <script src="/scripts/index.js"></script>
   </head>
 
@@ -226,6 +227,62 @@
               <input id="feedId" name="feedId" />
             </div>
             <input type="submit" value="Get" />
+          </form>
+          <form id="post-community">
+            <h3>Create Community</h3>
+            <div>
+              <label for="communityName">Community name:</label>
+              <input id="communityName" name="communityName" />
+            </div>
+            <input type="submit" value="Create" />
+          </form>
+          <form id="get-communities">
+            <h3>View all communities</h3>
+            <input type="submit" value="Get" />
+          </form>
+          <form id="get-community">
+            <h3>Get Community</h3>
+            <div>
+              <label for="communityName">Community name:</label>
+              <input id="communityName" name="communityName" />
+            </div>
+            <input type="submit" value="Get" />
+          </form>
+          <form id="join-community">
+            <h3>Join Community</h3>
+            <div>
+              <label for="communityId">Community ID:</label>
+              <input id="communityId" name="communityId" />
+            </div>
+            <input type="submit" value="Join" />
+          </form>
+          <form id="leave-community">
+            <h3>Leave Community</h3>
+            <div>
+              <label for="communityId">Community ID:</label>
+              <input id="communityId" name="communityId" />
+            </div>
+            <input type="submit" value="Leave" />
+          </form>
+          <form id="change-community-owner">
+            <h3>Change Community Owner</h3>
+            <div>
+              <label for="communityId">Community ID:</label>
+              <input id="communityId" name="communityId" />
+            </div>
+            <div>
+              <label for="username">Username:</label>
+              <input id="username" name="username" />
+            </div>
+            <input type="submit" value="Update" />
+          </form>
+          <form id="delete-community">
+            <h3>Delete Community</h3>
+            <div>
+              <label for="communityId">Community ID:</label>
+              <input id="communityId" name="communityId" />
+            </div>
+            <input type="submit" value="Delete" />
           </form>
         </div>
       </section>

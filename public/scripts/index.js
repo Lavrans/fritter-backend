@@ -50,6 +50,13 @@ const formsAndHandlers = {
   "delete-reply": deleteReply,
   "get-friends": getFriends,
   "get-feed": getFeed,
+  "post-community": createCommunity,
+  "get-communities": viewAllCommunities,
+  "get-community": viewCommunity,
+  "join-community": joinCommunity,
+  "leave-community": leaveCommunity,
+  "change-community-owner": changeCommunityOwner,
+  "delete-community": deleteCommunity,
 };
 
 // Attach handlers to forms
