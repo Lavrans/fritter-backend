@@ -61,3 +61,13 @@ function deleteCommunity(fields) {
     .then(showResponse)
     .catch(showResponse);
 }
+
+function createFreetInCommunity(fields) {
+  fetch("/api/freets", {
+    method: "POST",
+    body: JSON.stringify(fields),
+    headers: { "Content-Type": "application/json" },
+  })
+    .then(showResponse)
+    .catch(showResponse);
+}

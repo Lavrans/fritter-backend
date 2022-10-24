@@ -57,6 +57,7 @@ const formsAndHandlers = {
   "leave-community": leaveCommunity,
   "change-community-owner": changeCommunityOwner,
   "delete-community": deleteCommunity,
+  "create-freet-in-community": createFreetInCommunity,
 };
 
 // Attach handlers to forms
