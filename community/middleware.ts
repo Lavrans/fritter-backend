@@ -1,17 +1,17 @@
-import type { Request, Response, NextFunction } from "express";
-import CommunityCollection from "../community/collection";
-import CommunityModel from "./model";
+import type {Request, Response, NextFunction} from 'express';
+import CommunityCollection from '../community/collection';
+import CommunityModel from './model';
 
 const isMember = async (req: Request, res: Response, next: NextFunction) => {
   const community = await CommunityModel.findOne({
-    _id: req.params.communityId,
+    _id: req.params.communityId
   });
   const index = community.members.indexOf(req.session.userId);
   if (index < 0) {
     res.status(400).json({
       error: {
-        communityname: `You are not a member of ${community.name}`,
-      },
+        communityname: `You are not a member of ${community.name}`
+      }
     });
     return;
   }
@@ -21,14 +21,14 @@ const isMember = async (req: Request, res: Response, next: NextFunction) => {
 
 const isNotMember = async (req: Request, res: Response, next: NextFunction) => {
   const community = await CommunityModel.findOne({
-    _id: req.params.communityId,
+    _id: req.params.communityId
   });
   const index = community.members.indexOf(req.session.userId);
   if (index >= 0) {
     res.status(400).json({
       error: {
-        communityname: `You are already a member of ${community.name}`,
-      },
+        communityname: `You are already a member of ${community.name}`
+      }
     });
     return;
   }
@@ -38,14 +38,14 @@ const isNotMember = async (req: Request, res: Response, next: NextFunction) => {
 
 const isOwner = async (req: Request, res: Response, next: NextFunction) => {
   const community = await CommunityModel.findOne({
-    _id: req.params.communityId,
+    _id: req.params.communityId
   });
-  const { owner } = community;
+  const {owner} = community;
   if (req.session.userId.toString() != owner.toString()) {
     res.status(400).json({
       error: {
-        communityname: `You are not the owner of ${community.name}`,
-      },
+        communityname: `You are not the owner of ${community.name}`
+      }
     });
     return;
   }
@@ -55,14 +55,14 @@ const isOwner = async (req: Request, res: Response, next: NextFunction) => {
 
 const isNotOwner = async (req: Request, res: Response, next: NextFunction) => {
   const community = await CommunityModel.findOne({
-    _id: req.params.communityId,
+    _id: req.params.communityId
   });
-  const { owner } = community;
+  const {owner} = community;
   if (req.session.userId.toString() == owner.toString()) {
     res.status(400).json({
       error: {
-        communityname: `You are the owner of ${community.name}`,
-      },
+        communityname: `You are the owner of ${community.name}`
+      }
     });
     return;
   }
@@ -80,7 +80,7 @@ const isCommunityExists = async (
   );
   if (!community) {
     res.status(404).json({
-      error: `A community with communityname ${req.params.communityname} does not exist.`,
+      error: `A community with communityname ${req.params.communityname} does not exist.`
     });
     return;
   }
@@ -99,9 +99,10 @@ const isCommunityExistsById = async (
       req.params.communityId
     );
   } catch {}
+
   if (!community) {
     res.status(404).json({
-      error: `A community with communityname ${req.params.communityname} does not exist.`,
+      error: `A community with communityname ${req.params.communityname} does not exist.`
     });
     return;
   }
@@ -119,7 +120,7 @@ const isValidCommunityname = async (
   );
   if (community) {
     res.status(409).json({
-      error: `A community with name ${req.params.communityname} already exists.`,
+      error: `A community with name ${req.params.communityname} already exists.`
     });
     return;
   }
@@ -132,17 +133,17 @@ const isValidAction = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { action } = req.query;
+  const {action} = req.query;
   if (!action) {
     res.status(400).json({
-      error: "Provide action: join | leave",
+      error: 'Provide action: join | leave'
     });
     return;
   }
 
-  if (action != "join" && action != "leave") {
+  if (action != 'join' && action != 'leave') {
     res.status(400).json({
-      error: `Valid actions: join | leave. You provided: ${action}`,
+      error: `Valid actions: join | leave. You provided: ${action}`
     });
     return;
   }
@@ -155,21 +156,21 @@ const isCanLeaveJoin = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { action } = req.query;
+  const {action} = req.query;
   const community = await CommunityCollection.findOneByCommunityId(
     req.params.communityId
   );
   const member = community.members.includes(req.session.userId);
-  if (action == "join" && member) {
+  if (action == 'join' && member) {
     res.status(400).json({
-      error: `You are already a member of ${community.name}`,
+      error: `You are already a member of ${community.name}`
     });
     return;
   }
 
-  if (action == "leave" && !member) {
+  if (action == 'leave' && !member) {
     res.status(400).json({
-      error: `You are not a member of ${community.name}`,
+      error: `You are not a member of ${community.name}`
     });
     return;
   }
@@ -186,5 +187,5 @@ export {
   isCommunityExistsById,
   isValidCommunityname,
   isValidAction,
-  isCanLeaveJoin,
+  isCanLeaveJoin
 };
